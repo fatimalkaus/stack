@@ -1,0 +1,9 @@
+server:
+  port: 8080
+  host: "0.0.0.0"
+postgres:
+  host: postgres
+  port: 5432
+  user: test
+  password: changeme123
+  database: test

@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: changeme123
+      POSTGRES_USER: test
+      PGDATA: /data/postgres
+      POSTGRES_DB: test
+    volumes:
+       - postgres:/data/postgres
+  stack-server:
+    image: fatimalkaus/stack-server
+    container_name: stack-server
+    volumes:
+      - ./config.yaml:/etc/stack/config.yaml
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+volumes:
+    postgres:
