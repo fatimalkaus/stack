@@ -1,4 +1,4 @@
-VERSION ?= $(shell git describe --always --match "v[0-9]*" HEAD)
+VERSION ?= $(shell git describe --abbrev=0 --tags)
 POSTGRES_URL ?= "postgres://test:changeme123@localhost:5432/test?sslmode=disable"
 REPONAME ?= fatimalkaus
 IMAGE_NAME ?= stack-server
