@@ -28,7 +28,7 @@ func NewPostgresStack(g *gorm.DB) (Stack, error) {
 
 // Push pushes data to stack.
 func (s *PostgresStack) Push(ctx context.Context, val any) error {
-	if err := s.db.Create(&item{Value: val.(string)}).Error; err != nil {
+	if err := s.db.WithContext(ctx).Create(&item{Value: val.(string)}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -37,7 +37,7 @@ func (s *PostgresStack) Push(ctx context.Context, val any) error {
 // Pop pops data from stack.
 func (s *PostgresStack) Pop(ctx context.Context) (any, error) {
 	var value interface{}
-	if err := s.db.Transaction(func(tx *gorm.DB) error {
+	if err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		var item item
 		if err := tx.Order("id desc").First(&item).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -62,7 +62,7 @@ func (s *PostgresStack) Pop(ctx context.Context) (any, error) {
 // Peek peeks data from stack.
 func (s *PostgresStack) Peek(ctx context.Context) (any, error) {
 	var item item
-	if err := s.db.Order("id desc").First(&item).Error; err != nil {
+	if err := s.db.WithContext(ctx).Order("id desc").First(&item).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrIsEmpty
 		}
